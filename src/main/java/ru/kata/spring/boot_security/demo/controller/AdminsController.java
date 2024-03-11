@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +14,7 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImp;
 import ru.kata.spring.boot_security.demo.service.UserServiceImp;
 
+import java.security.Principal;
 import java.util.Set;
 
 @Controller
@@ -31,7 +31,8 @@ public class AdminsController {
     }
 
     @GetMapping(value = "")
-    public String printUsers(ModelMap model) {
+    public String printUsers(ModelMap model, Principal principal) {
+        model.addAttribute("userAuth", userService.findUserByUsername(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
         return "users";
     }

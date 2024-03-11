@@ -6,6 +6,15 @@
 </head>
 <body th:bgcolor="ghostwhite" th:align="center">
 <br/>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link" th:href="@{/admin}">Users table</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" aria-current="page" th:href="@{/admin/add}">New User</a>
+    </li>
+</ul>
+<br/>
 <div class="center">
     <h2 th:align="center">Add new user</h2>
     <form th:action="@{/admin/add}" th:method="POST" th:object="${user}">
