@@ -9,6 +9,8 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImp;
 
 import javax.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 @Component
@@ -35,5 +37,6 @@ public class DBInit {
 
         userRepository.saveUser(new User("admin", passwordEncoder.encode("123"), 22, "admin@mail.ru", Set.of(adminRole)));
         userRepository.saveUser(new User("user1", passwordEncoder.encode("456"), 23, "user1@mail.ru", Set.of(userRole)));
+
     }
 }

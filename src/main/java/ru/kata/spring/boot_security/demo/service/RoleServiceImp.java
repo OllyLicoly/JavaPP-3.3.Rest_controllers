@@ -26,6 +26,7 @@ public class RoleServiceImp implements RoleService {
         return roleRepository.getAllRoles();
     }
 
+    @Override
     public Set<Role> findById(Set<Long> rolesId) {
         return roleRepository.findById(rolesId);
     }

@@ -76,8 +76,6 @@
                                             <button type="button" class="btn btn-success" data-toggle="modal"
                                                     th:attr="data-target='#modalEdit' + ${user.id}">Edit
                                             </button>
-
-
 <!-- Modal Edit-->
                                             <div class="modal fade" th:id="'modalEdit' + ${user.getId()}">
                                                 <div class="modal-dialog modal-dialog-centered">
@@ -119,7 +117,6 @@
                                                                 <button type="submit" class="btn btn-primary">Edit</button>
                                                             </form>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -129,7 +126,6 @@
                                             <button type="button" class="btn btn-danger" data-toggle="modal"
                                                     th:attr="data-target='#modalDelete' + ${user.id}">Delete
                                             </button>
-
 <!-- Modal Delete-->
                                             <div class="modal fade" th:id="'modalDelete' + ${user.getId()}">
                                                 <div class="modal-dialog modal-dialog-centered">
@@ -175,6 +171,7 @@
                                                 </div>
                                             </div>
                                         </td>
+
                                     </tr>
                                     </tbody>
                                 </table>
