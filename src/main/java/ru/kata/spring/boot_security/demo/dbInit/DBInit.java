@@ -9,8 +9,6 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 import ru.kata.spring.boot_security.demo.service.RoleServiceImp;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 @Component
