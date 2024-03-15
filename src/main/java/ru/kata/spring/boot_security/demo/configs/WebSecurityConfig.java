@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder authMB) throws Exception {
         authMB.userDetailsService(
-                username -> Optional.of(userService.loadUserByUsername(username))
+                email -> Optional.of(userService.loadByEmail(email))
                         .orElseThrow(() -> new UsernameNotFoundException("UserNotFound"))
         ).passwordEncoder(bCryptPasswordEncoder());
     }

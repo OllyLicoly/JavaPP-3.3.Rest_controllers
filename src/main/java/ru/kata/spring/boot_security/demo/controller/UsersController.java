@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.kata.spring.boot_security.demo.service.UserServiceImp;
+import ru.kata.spring.boot_security.demo.service.UserService;
 
 import java.security.Principal;
 
@@ -13,9 +13,9 @@ import java.security.Principal;
 @RequestMapping("/user")
 public class UsersController {
 
-    private final UserServiceImp userService;
+    private final UserService userService;
     @Autowired
-    public UsersController(UserServiceImp userService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
     }
 

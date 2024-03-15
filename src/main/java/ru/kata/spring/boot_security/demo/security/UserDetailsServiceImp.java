@@ -26,4 +26,12 @@ public class UserDetailsServiceImp implements UserDetailsService {
         }
         return new UserPrincipal(user);
     }
+
+    public UserDetails loadByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return new UserPrincipal(user);
+    }
 }

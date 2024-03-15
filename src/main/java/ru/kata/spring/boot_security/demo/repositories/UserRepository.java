@@ -8,6 +8,8 @@ import java.util.List;
 
     User findByUsername(String username);
 
+    User findByEmail(String username);
+
     User findUserById(Long id);
 
     void saveUser(User user);

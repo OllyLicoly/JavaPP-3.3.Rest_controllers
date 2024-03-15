@@ -28,6 +28,14 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
+    public User findByEmail(String email){
+        return (User) manager
+                .createQuery("select u from User u left join fetch u.roles where u.email=:email")
+                .setParameter("email", email)
+                .getSingleResult();
+     }
+
+    @Override
     public User findUserById(Long id) {
         return manager.find(User.class, id);
     }
@@ -41,7 +49,11 @@ public class UserRepositoryImp implements UserRepository{
 
     @Override
     public void deleteUserById(Long id) {
-        manager.createQuery ("delete from User " + "where id=:userID")
-                .setParameter("userID", id).executeUpdate();
+//        manager.createQuery ("delete from User " + "where id=:id")
+//                .setParameter("id", id).executeUpdate();
+        User user = manager.find(User.class, id);
+        if (user!= null) {
+            manager.remove(user);
+        }
     }
 }
