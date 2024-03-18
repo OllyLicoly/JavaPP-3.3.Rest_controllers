@@ -14,7 +14,7 @@ public class UserRepositoryImp implements UserRepository{
     @PersistenceContext
     private EntityManager manager;
 
-     @Override
+    @Override
     public List<User> getAllUsers() {
         return manager.createQuery("from User", User.class).getResultList();
     }
@@ -46,14 +46,9 @@ public class UserRepositoryImp implements UserRepository{
          manager.merge(user);
     }
 
-
     @Override
     public void deleteUserById(Long id) {
-//        manager.createQuery ("delete from User " + "where id=:id")
-//                .setParameter("id", id).executeUpdate();
-        User user = manager.find(User.class, id);
-        if (user!= null) {
-            manager.remove(user);
-        }
+        manager.createQuery ("delete from User " + "where id=:id")
+                .setParameter("id", id).executeUpdate();
     }
 }
