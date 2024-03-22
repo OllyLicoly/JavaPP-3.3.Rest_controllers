@@ -26,7 +26,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
-@RestController
+//@RestController
+@Controller
 @RequestMapping("/api/admin")
 public class AdminsController {
     private final UserService userService;
@@ -38,12 +39,22 @@ public class AdminsController {
         this.roleService = roleService;
     }
 
-
-    @GetMapping("/users")
-    public ResponseEntity<List<User>> allUsers() {
-        List<User> userList = userService.getAllUsers();
-        return ResponseEntity.ok(userList);
+    @GetMapping(value = "/users")
+    public String printUsers(ModelMap model
+//            , Principal principal
+    ) {
+//        model.addAttribute("userAuth", userService.findUserByUsername(principal.getName()));
+        model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAllRoles());
+        model.addAttribute("newUser", new User());
+        return "users";
     }
+
+//    @GetMapping("/users")
+//    public ResponseEntity<List<User>> allUsers() {
+//        List<User> userList = userService.getAllUsers();
+//        return ResponseEntity.ok(userList);
+//    }
 
 //    @GetMapping("/users/{id}")
 //    public ResponseEntity<User> getUser(@PathVariable Long id) {
@@ -74,4 +85,33 @@ public class AdminsController {
 //    }
 
 
+
+
+//    @PostMapping("/delete{id}")
+//    public String deleteUser(@ModelAttribute("user") User user, @RequestParam("id") Long id) {
+//        userService.deleteUserById(id);
+//        return "redirect:/admin";
+//    }
+
+
+//    @PostMapping("/update")
+//    public String updateUser(@ModelAttribute("user") User user,
+//                             @RequestParam("id") Long id,
+//                             @RequestParam("roles") Set<Long> rolesId) {
+//        Set<Role> roles = roleService.findById(rolesId);
+//        user.setRoles(roles);
+//        user.setPassword(user.getPassword());
+//        userService.updateUser(user);
+//        return "redirect:/admin";
+//    }
+//
+//    @PostMapping("/add")
+//    public String addNewUser(@ModelAttribute("user") User user,
+//                             @RequestParam("roles") Set<Long> rolesId) {
+//        Set<Role> roles = roleService.findById(rolesId);
+//        user.setRoles(roles);
+//        user.setPassword(user.getPassword());
+//        userService.saveUser(user);
+//        return "redirect:/admin";
+//    }
 }
