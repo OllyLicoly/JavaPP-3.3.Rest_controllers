@@ -37,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/login")
 //                .permitAll()
 //                .antMatchers("/api/admin/", "/admin/**").hasRole("ADMIN")
-//                .antMatchers("/api/user/", "/user/**").hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/api/user/", "/user/").hasAnyRole("USER", "ADMIN")
 //                .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -61,4 +61,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         .orElseThrow(() -> new UsernameNotFoundException("UserNotFound"))
         ).passwordEncoder(bCryptPasswordEncoder());
     }
+
 }

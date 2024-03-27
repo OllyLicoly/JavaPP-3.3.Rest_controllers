@@ -2,6 +2,9 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.hibernate.sql.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,12 +25,13 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import javax.annotation.Resource;
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
-//@RestController
-@Controller
+@RestController
+//@Controller
 @RequestMapping("/api/admin")
 public class AdminsController {
     private final UserService userService;
@@ -39,21 +43,38 @@ public class AdminsController {
         this.roleService = roleService;
     }
 
-    @GetMapping(value = "/users")
-    public String printUsers(ModelMap model
+//    @GetMapping(value = "/users")
+//    public String printUsers(ModelMap model
 //            , Principal principal
-    ) {
+//    ) {
 //        model.addAttribute("userAuth", userService.findUserByUsername(principal.getName()));
-        model.addAttribute("users", userService.getAllUsers());
-        model.addAttribute("roles", roleService.getAllRoles());
-        model.addAttribute("newUser", new User());
-        return "users";
+//        model.addAttribute("users", userService.getAllUsers());
+//        model.addAttribute("roles", roleService.getAllRoles());
+//        model.addAttribute("newUser", new User());
+//        return "users";
+//    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> allUsers() {
+        List<User> userList = userService.getAllUsers();
+        return ResponseEntity.ok(userList);
     }
 
-//    @GetMapping("/users")
-//    public ResponseEntity<List<User>> allUsers() {
-//        List<User> userList = userService.getAllUsers();
-//        return ResponseEntity.ok(userList);
+    @PostMapping("/user")
+    public ResponseEntity<HttpStatus> addUser(@RequestBody User user) {
+        userService.saveUser(user);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+
+//    @GetMapping("/static/{folder}/{fileName:.+}")
+//    @ResponseBody
+//    public ResponseEntity<Resource> getStaticFile(@PathVariable String folder, @PathVariable String fileName) {
+//        Resource file = (Resource) new ClassPathResource("static/" + folder + "/" + fileName);
+//
+//        return ResponseEntity.ok()
+//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getClass().getName() + "\"")
+//                .body(file);
 //    }
 
 //    @GetMapping("/users/{id}")
@@ -62,7 +83,7 @@ public class AdminsController {
 //    }
 //
 //
-//    @PostMapping("/users")
+//    @PostMapping("/user")
 //    public User addNewUser(@RequestBody User user) {
 ////        User temp = user;
 ////        user.setRoles((Set<Role>) roleService.getAllRoles());

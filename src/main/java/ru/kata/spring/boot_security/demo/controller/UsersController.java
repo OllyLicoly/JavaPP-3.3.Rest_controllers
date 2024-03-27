@@ -3,6 +3,7 @@ package ru.kata.spring.boot_security.demo.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,11 +26,27 @@ public class UsersController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findUserById(id));
-        }
+    public ResponseEntity<User> apiGetOneUser(@PathVariable("id") long id) {
+        User user = userService.findUserById(id);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
 
-//    @GetMapping(value = "")
+//    @GetMapping
+//    public ResponseEntity<User> getAuthUser(@AuthenticationPrincipal User user) {
+//        return ResponseEntity.ok(user);
+//    }
+//
+//    @GetMapping("/current")
+//    public ResponseEntity<User> getCurrentUser(Principal principal) {
+//        return new ResponseEntity<>(userService.findUserByUsername(principal.getName()), HttpStatus.OK);
+//    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<User> getUser(@PathVariable Long id) {
+//        return ResponseEntity.ok(userService.findUserById(id));
+//        }
+//
+//    @GetMapping(value = "/current")
 //    public String showUserPage(Principal principal, Model model) {
 //        model.addAttribute("user", userService.findUserByUsername(principal.getName()));
 //        return "userprofile";

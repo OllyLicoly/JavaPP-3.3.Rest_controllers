@@ -42,6 +42,10 @@ public class Role{
         return role;
     }
 
+//    public String getRoleNameString() {
+//        return getRoleName().replace("ROLE_", "");
+//    }
+
     public void setRole(String role) {
         this.role = role;
     }
@@ -58,4 +62,5 @@ public class Role{
     public int hashCode() {
         return Objects.hash(getId(), getRole(), users);
     }
+
 }
