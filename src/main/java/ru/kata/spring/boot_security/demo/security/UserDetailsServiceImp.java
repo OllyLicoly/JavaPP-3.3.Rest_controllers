@@ -19,19 +19,32 @@ public class UserDetailsServiceImp implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) {
+        User user = userRepository.findByUsername(email);
         if (user == null) {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException(email);
         }
         return new UserPrincipal(user);
     }
 
-    public UserDetails loadByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
-        }
-        return new UserPrincipal(user);
-    }
+
+//    @Override
+//    public UserDetails loadUserByUsername(String username) {
+//        User user = userRepository.findByUsername(username);
+//        if (user == null) {
+//            throw new UsernameNotFoundException(username);
+//        }
+//        return new UserPrincipal(user);
+//    }
+
+
+//    public UserDetails loadByEmail(String email) {
+//        User user = userRepository.findByEmail(email);
+//        if (user == null) {
+//            throw new UsernameNotFoundException("User not found");
+//        }
+//        return new UserPrincipal(user);
+//    }
+
+
 }

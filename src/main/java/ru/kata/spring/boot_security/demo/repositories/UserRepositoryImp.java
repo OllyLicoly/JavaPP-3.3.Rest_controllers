@@ -20,13 +20,16 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public User findByUsername(String username) {
+    public User findByUsername(String email) {
 //        return (User) manager
 //                .createQuery("select u from User u left join fetch u.roles where u.username=:username")
 //                .setParameter("username", username)
 //                .getSingleResult();
-        return manager.createQuery("select u from User u where u.username = :username", User.class)
-                .setParameter("username", username)
+//        return manager.createQuery("select u from User u where u.username = :username", User.class)
+//                .setParameter("username", username)
+//                .getSingleResult();
+        return (User) manager.createQuery("select u from User u left join fetch u.roles where u.email = :email")
+                .setParameter("email", email)
                 .getSingleResult();
     }
 
@@ -48,12 +51,20 @@ public class UserRepositoryImp implements UserRepository{
     @Transactional
     @Override
     public void saveUser(User user) {
-         manager.merge(user);
+         manager.persist(user);
     }
+
+    @Override
+    public void updateUser(User user) {
+        manager.merge(user);
+    }
+
 
     @Override
     public void deleteUserById(Long id) {
         manager.createQuery ("delete from User " + "where id=:id")
                 .setParameter("id", id).executeUpdate();
     }
+
+
 }

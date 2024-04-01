@@ -1,29 +1,18 @@
-
 $(async function () {
-    await getTableWithUsers();
+    await getAllUsers();
+    getUser()
 })
 
-const userFetchService = {
-    head: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-        'Referer': null
-    },
 
-    findAllUsers: async () => await fetch('/api/admin/users'),
-
-}
-
-async function getTableWithUsers() {
-    let table = $('#mainTableWithUsers tbody');
+async function getAllUsers() {
+    let table = $('#AllUsers tbody');
     table.empty();
 
-    await userFetchService.findAllUsers()
+    fetch('/api/admin/users')
         .then(res => res.json())
         .then(users => {
-            console.log(users)
             users.forEach(user => {
-                let tableFilling = `$(
+                let tabContent = `$(
                         <tr>
                             <td>${user.id}</td>
                             <td>${user.username}</td>
@@ -31,47 +20,200 @@ async function getTableWithUsers() {
                             <td>${user.email}</td>
                             <td>${user.roles.map(role => role.role.substring(5)).join(" ")}</td>
                             <td>
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-userid="${user.id}" data-action="edit"  
-                                data-target="#modalEdit">Edit</button>
+                                <button type="button" class="btn btn-success" data-toggle="modal" onclick="editModal(${user.id})"  
+                                data-target="#modalEdit" >Edit</button>                                
                             </td> 
                             <td>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-userid="${user.id}" data-action="delete" 
+                                <button type="button" class="btn btn-danger" data-toggle="modal" onclick="deleteModal(${user.id})" 
                                 data-target="#modalDelete">Delete</button>
                             </td>
                         </tr>
                 )`;
-                table.append(tableFilling);
+                table.append(tabContent);
             })
         })
 
 }
 
 
-const applicantForm = document.getElementById('formNew')
-applicantForm.addEventListener('submit', createNewUser)
+function getUser() {
+    let table = $('#CurrentUser tbody');
+    table.empty();
 
-function createNewUser() {
-        let roles = [];
-        for (let i = 0; i < applicantForm.roles.options.length; i++) {
-            if (applicantForm.roles.options[i].selected) roles.push({
-                id: applicantForm.roles.options[i].value,
-                role: "ROLE_" + applicantForm.roles.options[i].text
-            });
-        }
-        fetch("/api/admin/user", {
-            method: 'POST',
+    fetch("/api/admin/current").then(res => res.json())
+        .then(data => {
+            currentUser = data;
+            // console.log(data)
+            let tabContent = `$(
+                        <tr>
+                            <td>${currentUser.id}</td>
+                            <td>${currentUser.username}</td>
+                            <td>${currentUser.age}</td>
+                            <td>${currentUser.email}</td>
+                            <td>${currentUser.roles.map(role => role.role.substring(5)).join(" ")}</td>
+                        </tr>
+                )`;
+            table.append(tabContent);
+
+            document.getElementById("headerUsername").innerText = currentUser.username;
+            document.getElementById("headerUserRoles").innerText = currentUser.roles.map(role => role.role.substring(5)).join(" ");
+        })
+}
+
+
+let addForm = document.getElementById('formNew')
+addForm.addEventListener('submit', addUser)
+addForm.addEventListener('submit', successAdd)
+
+function successAdd() {
+    alert("User added!")
+}
+
+function addUser() {
+    let roles = [];
+    for (let i = 0; i < addForm.roles.options.length; i++) {
+        if (addForm.roles.options[i].selected) roles.push({
+            id: addForm.roles.options[i].value,
+            role: "ROLE_" + addForm.roles.options[i].text
+        });
+    }
+    fetch("/api/admin/user", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            username: addForm.username.value,
+            age: addForm.age.value,
+            email: addForm.email.value,
+            password: addForm.password.value,
+            roles: roles
+        })
+    }).then(() =>
+        getAllUsers()
+    );
+}
+
+
+async function getOneUser(id) {
+    let response = await fetch("/api/admin/user/" + id);
+    return await response.json();
+}
+
+// function rolesUser(event) {
+//     const rolesUser = createRole(1, "ROLE_USER");
+//     const rolesAdmin = createRole(2, "ROLE_ADMIN");
+//     let roles = [];
+//     let allRoles = [];
+//     let sel = document.querySelector(event);
+//     for (let i = 0, n = sel.options.length; i < n; i++) {
+//         if (sel.options[i].selected) {
+//             roles.push(sel.options[i].value);
+//         }
+//     }
+//     if (roles.includes('1')) {
+//         allRoles.push(rolesUser);
+//     }
+//     if (roles.includes('2')) {
+//         allRoles.push(rolesAdmin);
+//     } else if (roles.length === 0) {
+//         allRoles.push(rolesUser)
+//     }
+//     return allRoles;
+// }
+//
+// function createRole(roleId, roleName) {
+//     return {
+//         roleId,
+//         roleName,
+//     };
+// }
+
+
+// Delete user
+
+async function fillModalDelete(form, modal, id) {
+    let user = await getOneUser(id);
+    let roles = user.roles.map(role => role.role.substring(5)).join(" ");
+    document.getElementById('idDel').setAttribute('value', user.id);
+    document.getElementById('nameDel').setAttribute('value', user.username);
+    document.getElementById('ageDel').setAttribute('value', user.age);
+    document.getElementById('emailDel').setAttribute('value', user.email);
+    document.getElementById('passwordDel').setAttribute('value', user.password);
+    document.getElementById('userRolesDel').setAttribute('value', roles)
+}
+
+let deleteForm = document.forms["deleteUser"]
+async function deleteModal(id) {
+    const modal = new bootstrap.Modal(document.querySelector('#modalDelete'));
+    await fillModalDelete(deleteForm, modal, id);
+    deleteForm.addEventListener("submit", ev => {
+        fetch("api/admin/user/" + id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(() => {
+            alert("User deleted")
+            getAllUsers();
+        });
+    });
+}
+
+
+// Edit user
+
+async function fillModalEdit(form, modal, id) {
+    let user = await getOneUser(id);
+    let roles = user.roles.map(role => role.role.substring(5)).join(" ");
+    document.getElementById('idEd').setAttribute('value', user.id);
+    document.getElementById('nameEd').setAttribute('value', user.username);
+    document.getElementById('ageEd').setAttribute('value', user.age);
+    document.getElementById('emailEd').setAttribute('value', user.email);
+    document.getElementById('passwordEd').setAttribute('value', user.password);
+    document.getElementById('userRolesEd').setAttribute('value', roles);
+    // if ((user.roles.map(role => role.id)) === 1 && ((user.roles.map(role => role.id)) === 2)) {
+    //     document.getElementById('user').setAttribute('selected', 'true');
+    //     document.getElementById('admin').setAttribute('selected', 'true');
+    // } else if ((user.roles.map(role => role.id)) === 1) {
+    //     document.getElementById('user').setAttribute('selected', 'true');
+    // } else if (user.roles.map(role => role.id) === 2) {
+    //     document.getElementById('admin').setAttribute('selected', 'true');
+    // }
+    // document.getElementById('userRolesEd').setAttribute('value', roles)
+    // if (roles === 1) {
+    //     document.form.roles.options[0].setAttribute('selected', 'true');
+    // } else if (roles === 2) {
+    //     document.form.roles.options[1].setAttribute('selected', 'true');
+    // }
+}
+
+
+let editForm = document.forms["editUser"]
+
+async function editModal(id) {
+    const modal = new bootstrap.Modal(document.querySelector('#modalEdit'));
+    // let roles = [];
+    await fillModalEdit(editForm, modal, id);
+    editForm.addEventListener("submit", ev => {
+        ev.preventDefault();
+        fetch("api/admin/user/" + id, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                username: applicantForm.username.value,
-                age: applicantForm.age.value,
-                email: applicantForm.email.value,
-                password: applicantForm.password.value,
-                roles: roles
-            })
+                id: editForm.id.value,
+                username: editForm.name.value,
+                age: editForm.age.value,
+                email: editForm.email.value,
+                password: editForm.password.value,
+                // roles: editForm.roles.value
+            })}
+        ).then(() => {
+            $('#closeEdit').click();
+            getAllUsers();
+            alert("User edited")
         });
-    }
-
-
-
+    });
+}

@@ -14,6 +14,8 @@ import java.util.List;
 
     void saveUser(User user);
 
+    void updateUser(User user);
+
     void deleteUserById(Long id);
 
 }

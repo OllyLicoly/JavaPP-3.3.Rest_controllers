@@ -1,5 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
@@ -49,10 +50,9 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
-    @Transactional
     public void updateUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.saveUser(user);
+        userRepository.updateUser(user);
     }
 
     @Override
@@ -60,5 +60,11 @@ public class UserServiceImp implements UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteUserById(id);
     }
+
+    @Override
+    public User getCurrentUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
 
 }

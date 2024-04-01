@@ -1,34 +1,27 @@
-function testUser() {
-    if (window.jQuery) {
-        alert("JQ OK!")
-    } else {
-        alert("JQ no(")
-    }
-}
+$(async function () {
+    await getUser()
+})
+function getUser() {
+    let table = $('#CurrentUser tbody');
+    table.empty();
 
-let currentUser = "";
+    fetch("/api/admin/current").then(res => res.json())
+        .then(data => {
+            currentUser = data;
+            console.log(data)
 
+            let tabContent = `$(
+                        <tr>
+                            <td>${currentUser.id}</td>
+                            <td>${currentUser.username}</td>
+                            <td>${currentUser.age}</td>
+                            <td>${currentUser.email}</td>
+                            <td>${currentUser.roles.map(role => role.role.substring(5)).join(" ")}</td>
+                        </tr>
+                )`;
+            table.append(tabContent);
 
-
-fetch("/api/user/${id}")
-    .then(res => res.json())
-    .then(data => {
-        currentUser = data;
-        console.log(data)
-        showOneUser(currentUser);
-        document.getElementById("headUsername").innerText= currentUser.username;
-        document.getElementById("headRoles").innerText = currentUser.roles.map(role => role.roleNameString).join(" ");
-    })
-
-function showOneUser(user) {
-    let temp = "";
-    temp += "<tr>"
-    temp += "<td>" + user.id + "</td>"
-    // temp += "<td>" + user.firstName + "</td>"
-    // temp += "<td>" + user.lastName + "</td>"
-    // temp += "<td>" + user.age + "</td>"
-    temp += "<td>" + user.username + "</td>"
-    // temp += "<td>" + user.roles.map(role => role.roleNameString).join(" ") + "</td>"
-    temp += "</tr>"
-    document.getElementById("oneUserBody").innerHTML = temp;
+            document.getElementById("headerUsername").innerText = currentUser.username;
+            document.getElementById("headerUserRoles").innerText = currentUser.roles.map(role => role.role.substring(5)).join(" ");
+        })
 }
