@@ -66,37 +66,4 @@ public class AdminsController {
         userService.updateUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
-
-
-
-
-
-//    @PostMapping("/delete{id}")
-//    public String deleteUser(@ModelAttribute("user") User user, @RequestParam("id") Long id) {
-//        userService.deleteUserById(id);
-//        return "redirect:/admin";
-//    }
-
-
-//    @PostMapping("/update")
-//    public String updateUser(@ModelAttribute("user") User user,
-//                             @RequestParam("id") Long id,
-//                             @RequestParam("roles") Set<Long> rolesId) {
-//        Set<Role> roles = roleService.findById(rolesId);
-//        user.setRoles(roles);
-//        user.setPassword(user.getPassword());
-//        userService.updateUser(user);
-//        return "redirect:/admin";
-//    }
-//
-//    @PostMapping("/add")
-//    public String addNewUser(@ModelAttribute("user") User user,
-//                             @RequestParam("roles") Set<Long> rolesId) {
-//        Set<Role> roles = roleService.findById(rolesId);
-//        user.setRoles(roles);
-//        user.setPassword(user.getPassword());
-//        userService.saveUser(user);
-//        return "redirect:/admin";
-//    }
 }
