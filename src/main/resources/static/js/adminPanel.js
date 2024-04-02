@@ -43,7 +43,6 @@ function getUser() {
     fetch("/api/admin/current").then(res => res.json())
         .then(data => {
             currentUser = data;
-            // console.log(data)
             let tabContent = `$(
                         <tr>
                             <td>${currentUser.id}</td>
@@ -167,26 +166,8 @@ async function editModal(id) {
     }
     roleSelect.addEventListener("change", changeOption);
 
-    // async function sameRole() {
-    //
-    //     let user = await getOneUser(id);
-    //     console.log(user.roles)
-    //     roles = user.roles
-    //     console.log(roles)
-    //     // console.log(roles.id.valueOf())
-    //     // console.log(roles.role.valueOf())
-    //     roles.push({
-    //         id: roles.id,
-    //         role: roles.role
-    //     })
-    //
-    // }
-    // editForm.addEventListener("submit", sameRole())
-
-
     editForm.addEventListener("submit", ev => {
         ev.preventDefault();
-
         fetch("api/admin/user/" + id, {
             method: 'PATCH',
             headers: {
@@ -198,7 +179,6 @@ async function editModal(id) {
                 age: editForm.age.value,
                 email: editForm.email.value,
                 password: editForm.password.value,
-                // roles: roles
                 roles: roles
             })}
         ).then(() => {
