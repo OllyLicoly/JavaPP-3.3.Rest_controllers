@@ -10,14 +10,12 @@ public interface UserService {
 
     User findUserByUsername(String username);
 
+    User findUserByEmail(String email);
+
     void saveUser(User user);
 
     void updateUser(User user);
 
     void deleteUserById(Long id);
-
-
-    User getCurrentUser() ;
-
 
 }

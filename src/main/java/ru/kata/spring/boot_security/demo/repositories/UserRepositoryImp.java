@@ -20,16 +20,10 @@ public class UserRepositoryImp implements UserRepository{
     }
 
     @Override
-    public User findByUsername(String email) {
-//        return (User) manager
-//                .createQuery("select u from User u left join fetch u.roles where u.username=:username")
-//                .setParameter("username", username)
-//                .getSingleResult();
-//        return manager.createQuery("select u from User u where u.username = :username", User.class)
-//                .setParameter("username", username)
-//                .getSingleResult();
-        return (User) manager.createQuery("select u from User u left join fetch u.roles where u.email = :email")
-                .setParameter("email", email)
+    public User findByUsername(String username) {
+        return (User) manager
+                .createQuery("select u from User u left join fetch u.roles where u.username=:username")
+                .setParameter("username", username)
                 .getSingleResult();
     }
 

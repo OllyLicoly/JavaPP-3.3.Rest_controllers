@@ -100,37 +100,8 @@ async function getOneUser(id) {
     return await response.json();
 }
 
-// function rolesUser(event) {
-//     const rolesUser = createRole(1, "ROLE_USER");
-//     const rolesAdmin = createRole(2, "ROLE_ADMIN");
-//     let roles = [];
-//     let allRoles = [];
-//     let sel = document.querySelector(event);
-//     for (let i = 0, n = sel.options.length; i < n; i++) {
-//         if (sel.options[i].selected) {
-//             roles.push(sel.options[i].value);
-//         }
-//     }
-//     if (roles.includes('1')) {
-//         allRoles.push(rolesUser);
-//     }
-//     if (roles.includes('2')) {
-//         allRoles.push(rolesAdmin);
-//     } else if (roles.length === 0) {
-//         allRoles.push(rolesUser)
-//     }
-//     return allRoles;
-// }
-//
-// function createRole(roleId, roleName) {
-//     return {
-//         roleId,
-//         roleName,
-//     };
-// }
 
-
-// Delete user
+/* ---------- Delete user ---------- */
 
 async function fillModalDelete(form, modal, id) {
     let user = await getOneUser(id);
@@ -160,7 +131,7 @@ async function deleteModal(id) {
 }
 
 
-// Edit user
+/* ---------- Edit user ---------- */
 
 async function fillModalEdit(form, modal, id) {
     let user = await getOneUser(id);
@@ -171,16 +142,6 @@ async function fillModalEdit(form, modal, id) {
     document.getElementById('ageEd').setAttribute('value', user.age);
     document.getElementById('emailEd').setAttribute('value', user.email);
     document.getElementById('passwordEd').setAttribute('value', user.password);
-    // document.getElementById('rolesEd').setAttribute('value', roles)
-    // if ((user.roles.map(role => role.id)) === 1 && ((user.roles.map(role => role.id)) === 2)) {
-    //     document.getElementById('user').setAttribute('selected', 'true');
-    //     document.getElementById('admin').setAttribute('selected', 'true');
-    // } else if ((user.roles.map(role => role.id)) === 1) {
-    //     document.getElementById('user').setAttribute('selected', 'true');
-    // } else if (user.roles.map(role => role.id) === 2) {
-    //     document.getElementById('admin').setAttribute('selected', 'true');
-    // }
-    // document.getElementById('rolesEd').setAttribute('value', roles)
     if (roles === "USER") {
         document.editUserForm.rolesEd.options[1].setAttribute('selected', 'true');
     } else if (roles === "ADMIN") {
@@ -190,24 +151,6 @@ async function fillModalEdit(form, modal, id) {
 
 
 let editForm = document.forms["editUser"]
-
-// function selectRole(){
-//     const roleSelect = document.editUserForm.rolesEd;
-//     let roles = [];
-//
-//     function changeOption(){
-//         const selectedOption = roleSelect.options[roleSelect.selectedIndex];
-//         roles.push({
-//             id: selectedOption.value,
-//             role: "ROLE_" + selectedOption.text
-//         })
-//         console.log(selectedOption.value)
-//         console.log("ROLE_" + selectedOption.text)
-//         console.log(roles)
-//     }
-//
-//     roleSelect.addEventListener("change", changeOption);
-// }
 
 async function editModal(id) {
     const modal = new bootstrap.Modal(document.querySelector('#modalEdit'));

@@ -11,7 +11,6 @@ import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
 @RestController
-//@Controller
 @RequestMapping("/api/user")
 public class UsersController {
     private final UserService userService;

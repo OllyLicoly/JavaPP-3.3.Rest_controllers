@@ -43,6 +43,11 @@ public class UserServiceImp implements UserService {
     }
 
     @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     @Transactional
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -60,11 +65,5 @@ public class UserServiceImp implements UserService {
     public void deleteUserById(Long id) {
         userRepository.deleteUserById(id);
     }
-
-    @Override
-    public User getCurrentUser() {
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
 
 }
