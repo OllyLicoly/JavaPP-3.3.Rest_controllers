@@ -56,41 +56,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
     }
 
-//    @Bean
-//    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder authMB) throws Exception {
-//        authMB.userDetailsService(
-//                email -> Optional.of(userService.loadByEmail(email))
-//                        .orElseThrow(() -> new UsernameNotFoundException("UserNotFound"))
-//        ).passwordEncoder(bCryptPasswordEncoder());
-//    }
-
     @Bean
-    public PasswordEncoder getPasswordEncoder() {
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setPasswordEncoder(getPasswordEncoder());
-        authenticationProvider.setUserDetailsService(userService);
-        return authenticationProvider;
+    @Override
+    protected void configure(AuthenticationManagerBuilder authMB) throws Exception {
+        authMB.userDetailsService(
+                email -> Optional.of(userService.loadByEmail(email))
+                        .orElseThrow(() -> new UsernameNotFoundException("UserNotFound"))
+        ).passwordEncoder(bCryptPasswordEncoder());
     }
-//
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("http://localhost:8080"));
-//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
 
 }

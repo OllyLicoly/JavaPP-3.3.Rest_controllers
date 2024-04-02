@@ -86,7 +86,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body text-center font-weight-bold">
-                                                <form id="editUser">
+                                                <form id="editUser" name="editUserForm">
                                                     <label for="idEd">ID</label>
                                                     <input id="idEd" name="id" class="form-control" readonly="readonly"/>
                                                     <br>
@@ -102,8 +102,16 @@
                                                     <label for="emailEd">Email</label>
                                                     <input id="emailEd" name="email" type="email" class="form-control"/>
                                                     <br>
-                                                    <label for="userRolesEd">Roles</label>
-                                                    <input id="userRolesEd" type="text" class="form-control" disabled/>
+                                                    <div class="form-group">
+                                                        <label for="rolesEd">Roles</label>
+                                                        <select class="form-control" id="rolesEd"
+                                                                size="2" name="rolesEd">
+                                                            <option value="2">ADMIN</option>
+                                                            <option value="1">USER</option>
+                                                        </select>
+                                                    </div>
+<!--                                                    <label for="userRolesEd">Roles</label>-->
+<!--                                                    <input id="userRolesEd" type="text" class="form-control"/>-->
 <!--                                                    <label for="userRolesEd">Roles</label>-->
 <!--                                                    <select class="form-select" id="userRolesEd"-->
 <!--                                                            multiple required size="2" name="roles">-->

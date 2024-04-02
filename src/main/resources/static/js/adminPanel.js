@@ -154,7 +154,6 @@ async function deleteModal(id) {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            alert("User deleted")
             getAllUsers();
         });
     });
@@ -166,12 +165,13 @@ async function deleteModal(id) {
 async function fillModalEdit(form, modal, id) {
     let user = await getOneUser(id);
     let roles = user.roles.map(role => role.role.substring(5)).join(" ");
+    // console.log(roles)
     document.getElementById('idEd').setAttribute('value', user.id);
     document.getElementById('nameEd').setAttribute('value', user.username);
     document.getElementById('ageEd').setAttribute('value', user.age);
     document.getElementById('emailEd').setAttribute('value', user.email);
     document.getElementById('passwordEd').setAttribute('value', user.password);
-    document.getElementById('userRolesEd').setAttribute('value', roles);
+    // document.getElementById('rolesEd').setAttribute('value', roles)
     // if ((user.roles.map(role => role.id)) === 1 && ((user.roles.map(role => role.id)) === 2)) {
     //     document.getElementById('user').setAttribute('selected', 'true');
     //     document.getElementById('admin').setAttribute('selected', 'true');
@@ -180,23 +180,70 @@ async function fillModalEdit(form, modal, id) {
     // } else if (user.roles.map(role => role.id) === 2) {
     //     document.getElementById('admin').setAttribute('selected', 'true');
     // }
-    // document.getElementById('userRolesEd').setAttribute('value', roles)
-    // if (roles === 1) {
-    //     document.form.roles.options[0].setAttribute('selected', 'true');
-    // } else if (roles === 2) {
-    //     document.form.roles.options[1].setAttribute('selected', 'true');
-    // }
+    // document.getElementById('rolesEd').setAttribute('value', roles)
+    if (roles === "USER") {
+        document.editUserForm.rolesEd.options[1].setAttribute('selected', 'true');
+    } else if (roles === "ADMIN") {
+        document.editUserForm.rolesEd.options[0].setAttribute('selected', 'true');
+    }
 }
 
 
 let editForm = document.forms["editUser"]
 
+// function selectRole(){
+//     const roleSelect = document.editUserForm.rolesEd;
+//     let roles = [];
+//
+//     function changeOption(){
+//         const selectedOption = roleSelect.options[roleSelect.selectedIndex];
+//         roles.push({
+//             id: selectedOption.value,
+//             role: "ROLE_" + selectedOption.text
+//         })
+//         console.log(selectedOption.value)
+//         console.log("ROLE_" + selectedOption.text)
+//         console.log(roles)
+//     }
+//
+//     roleSelect.addEventListener("change", changeOption);
+// }
+
 async function editModal(id) {
     const modal = new bootstrap.Modal(document.querySelector('#modalEdit'));
-    // let roles = [];
     await fillModalEdit(editForm, modal, id);
+
+    let roles = [];
+    const roleSelect = document.editUserForm.rolesEd;
+    function changeOption(){
+        const selectedOption = roleSelect.options[roleSelect.selectedIndex];
+        roles.push({
+            id: selectedOption.value,
+            role: "ROLE_" + selectedOption.text
+        })
+    }
+    roleSelect.addEventListener("change", changeOption);
+
+    // async function sameRole() {
+    //
+    //     let user = await getOneUser(id);
+    //     console.log(user.roles)
+    //     roles = user.roles
+    //     console.log(roles)
+    //     // console.log(roles.id.valueOf())
+    //     // console.log(roles.role.valueOf())
+    //     roles.push({
+    //         id: roles.id,
+    //         role: roles.role
+    //     })
+    //
+    // }
+    // editForm.addEventListener("submit", sameRole())
+
+
     editForm.addEventListener("submit", ev => {
         ev.preventDefault();
+
         fetch("api/admin/user/" + id, {
             method: 'PATCH',
             headers: {
@@ -208,12 +255,12 @@ async function editModal(id) {
                 age: editForm.age.value,
                 email: editForm.email.value,
                 password: editForm.password.value,
-                // roles: editForm.roles.value
+                // roles: roles
+                roles: roles
             })}
         ).then(() => {
             $('#closeEdit').click();
             getAllUsers();
-            alert("User edited")
         });
     });
 }
